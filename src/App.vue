@@ -8,9 +8,14 @@
                 max-width="40"
                 contain
             ></v-img>
-            <v-app-bar-title  >Tutorial</v-app-bar-title>
+            <v-app-bar-title  >My Surveys</v-app-bar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items>
+              <v-btn 
+                    variant="text"
+                    @click="goHome" >
+                  Home
+                </v-btn>
                 <v-btn 
                     variant="text"
                     @click="goList"
@@ -30,6 +35,13 @@
           <router-view />
         </v-container>
       </v-main>  
+
+      <div class="footer">
+           <div class="container">
+             <p>© Copyright 2022 My Surveys. All rights reserved</p>
+           </div>   
+      </div>
+
     </v-app>
 </template>
 
@@ -42,6 +54,9 @@ export default {
     logo,
   }),
   methods: {
+    goHome() {
+      this.$router.push({ name: 'home' });
+    },
     goAdd() {
       this.$router.push({ name: 'add' });
     },
@@ -53,3 +68,17 @@ export default {
 }
 </script>
 
+
+<style>
+
+.footer{
+      border-top: 1px solid #ccc;
+}
+.footer p{
+  text-align: center;
+    color: #000;
+    font-size: 14px;
+    padding: 7px;
+}
+
+</style>
