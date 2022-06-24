@@ -28,6 +28,18 @@
                     >
                   Add
                 </v-btn>
+                <v-btn 
+                    variant="text"
+                    @click="goLogin"
+                    >
+                  Login
+                </v-btn>
+                <v-btn 
+                    variant="text"
+                    @click="goRegister"
+                    >
+                  Register
+                </v-btn>
             </v-toolbar-items>
       </v-app-bar>
       <v-main >
@@ -62,7 +74,14 @@ export default {
     },
     goList() {
       this.$router.push({ name: 'tutorials' });
+    },
+    goLogin() {
+      this.$router.push({ name: 'login' });
+    },
+    goRegister() {
+      this.$router.push({ name: 'register' });
     }
+
   },
 
 }
