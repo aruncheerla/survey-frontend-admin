@@ -134,5 +134,7 @@ export default {
 };
 </script>
 <style>
-
+.v-container h4{
+  margin-bottom: 25px;
+}
 </style>

@@ -6,7 +6,7 @@
             <v-layout align-center justify-center>
                <v-flex xs12 sm8 md4>
                   <v-card class="elevation-12">
-                     <v-toolbar dark color="primary">
+                     <v-toolbar dark >
                         <v-toolbar-title>Fill the form to Register</v-toolbar-title>
                      </v-toolbar>
                      <v-card-text>
@@ -42,7 +42,7 @@
                      </v-card-text>
                      <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="primary" to="/">Register</v-btn>
+                        <v-btn to="/">Register</v-btn>
                      </v-card-actions>
                   </v-card>
                </v-flex>
@@ -83,6 +83,13 @@ export default {
     font-size: 18px;
     border-radius: 0;
     padding: 7px 18px;
+    color: #000;
     height: unset;
+}
+.v-toolbar-title__placeholder{
+    color: #fff;
+}
+header.v-theme--light{
+    background-color: #000;
 }
 </style>

@@ -6,7 +6,7 @@
             <v-layout align-center justify-center>
                <v-flex xs12 sm8 md4>
                   <v-card class="elevation-12">
-                     <v-toolbar dark color="primary">
+                     <v-toolbar dark>
                         <v-toolbar-title>Login into your Portal</v-toolbar-title>
                      </v-toolbar>
                      <v-card-text>
@@ -26,7 +26,7 @@
                      </v-card-text>
                      <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="primary" to="/">Login</v-btn>
+                        <v-btn to="/">Login</v-btn>
                      </v-card-actions>
                   </v-card>
                </v-flex>
@@ -68,5 +68,12 @@ export default {
     border-radius: 0;
     padding: 7px 18px;
     height: unset;
+    color: #000;
+}
+.v-toolbar-title__placeholder{
+    color: #fff;
+}
+header.v-theme--light{
+    background-color: #000;
 }
 </style>
