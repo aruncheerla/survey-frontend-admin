@@ -3,11 +3,11 @@
     <h4>{{ message }}</h4>
     <v-form>
        <v-text-field
-            label="Title"
+            label="Survey Name"
             v-model="tutorial.title"
         />
         <v-text-field
-            label="Description"
+            label="Survey Description"
             v-model="tutorial.description"
         />
         <v-row justify="center">
@@ -63,5 +63,7 @@ export default {
 
 </script>
 <style>
-
+.v-main__wrap h4{
+  margin-bottom: 18px;
+}
 </style>
