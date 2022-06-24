@@ -1,10 +1,18 @@
 import { createWebHistory, createRouter } from "vue-router";
+
+
+
 const routes =  [
   {
-    path: "/",
-    alias: "/tutorials",
+    path: "/surveys",
+    alias: "/surveys",
     name: "tutorials",
     component: () => import("./views/TutorialsList.vue")
+  },
+  {
+    path: "/",
+    name: "home",
+    component: () => import("./views/home.vue")
   },
   {
     path: "/edit/:id",
@@ -34,7 +42,20 @@ const routes =  [
     name: "editLesson",
     component: () => import("./views/EditLesson.vue"),
     props: true
-  }
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: () => import("./views/Login.vue"),
+    props: true
+  },
+  {
+    path: "/register",
+    name: "register",
+    component: () => import("./views/Register.vue"),
+    props: true
+  },
+  
 ];
 const router = createRouter({
   base: process.env.NODE_ENV === 'development' ? '/' : '/tutorial-frontend-1/',
