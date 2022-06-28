@@ -12,6 +12,7 @@
 </template>
 
 <script>
+
 import banner from '../assets/home-banner.jpg'
 
 export default {

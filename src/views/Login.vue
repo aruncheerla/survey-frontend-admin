@@ -28,7 +28,7 @@
                      </v-card-text>
                      <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn>Login</v-btn>
+                        <v-btn to="/">Login</v-btn>
                         <v-btn to="/">Cancel</v-btn>
                      </v-card-actions>
                   </v-card>

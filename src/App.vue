@@ -71,7 +71,7 @@ export default {
     return: {
                 authenticated: false,
                 mockAccount: {
-                    username: "bharath123",
+                    username: "bharath"
                     password: "test"
                 }
             }

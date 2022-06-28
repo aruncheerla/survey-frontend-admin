@@ -3,16 +3,13 @@
     <h1>Surveys List</h1>
     <h4>{{ message }}</h4>
   
-
-
-
       <v-row >
         <v-col  cols="12"
         sm="2">
           <v-btn color = "success"
             @click="searchTitle"
           >
-            Search
+            Search 
           </v-btn>
         </v-col>
         <v-col col="12" sm="10">
