@@ -66,4 +66,16 @@ export default {
 .v-main__wrap h4{
   margin-bottom: 18px;
 }
+form button.v-btn {
+border: 2px solid;
+    margin-bottom: 27px;
+    font-size: 18px;
+    border-radius: 0;
+    padding: 7px 18px;
+    color: #000 !important;
+    height: unset;
+    background-color: #fff !important;
+}
+
+
 </style>

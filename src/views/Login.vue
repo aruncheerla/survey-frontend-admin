@@ -1,7 +1,8 @@
+
 <template>
 <h1>Login</h1>
    <v-app id="inspire">
-      <v-content>
+      <v-content id="login">
          <v-container fluid fill-height>
             <v-layout align-center justify-center>
                <v-flex xs12 sm8 md4>
@@ -11,22 +12,24 @@
                      </v-toolbar>
                      <v-card-text>
                         <v-form>
+                           
                            <v-text-field
-                              name="name"
+                              name="username"
                               label="Username"
-                              type="text"
+                              type="text" v-model="input.username"
                            ></v-text-field>
                            <v-text-field
                               id="password"
                               name="password"
                               label="Password"
-                              type="password"
-                           ></v-text-field>
+                              type="password" v-model="input.password"
+                           ></v-text-field> 
                         </v-form>
                      </v-card-text>
                      <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn to="/">Login</v-btn>
+                        <v-btn>Login</v-btn>
+                        <v-btn to="/">Cancel</v-btn>
                      </v-card-actions>
                   </v-card>
                </v-flex>
@@ -36,6 +39,7 @@
    </v-app>
 </template>
 
+<!--
 <script>
 export default {
    name: 'Login',
@@ -44,9 +48,38 @@ export default {
    },
 };
 </script>
+-->
+
+<script>
+    export default {
+        name: 'Login',
+        data() {
+            return {
+                input: {
+                    username: "",
+                    password: ""
+                }
+            }
+        },
+        methods: {
+            login() {
+                if(this.input.username != "" && this.input.password != "") {
+                    if(this.input.username == this.$parent.mockAccount.username && this.input.password == this.$parent.mockAccount.password) {
+                        this.$emit("authenticated", true);
+                        this.$router.replace({ name: "secure" });
+                    } else {
+                        console.log("The username and / or password is incorrect");
+                    }
+                } else {
+                    console.log("A username and password must be present");
+                }
+            }
+        }
+    }
+</script>
+
 
 <style>
-
 #inspire .v-layout{
     display: unset;
 }
@@ -75,5 +108,8 @@ export default {
 }
 header.v-theme--light{
     background-color: #000;
+}
+.v-card-actions .v-btn ~ .v-btn {
+    margin-inline-start: 6.3rem;
 }
 </style>

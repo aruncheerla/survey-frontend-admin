@@ -44,7 +44,10 @@
       </v-app-bar>
       <v-main >
         <v-container>
-          <router-view />
+          <div id="nav">
+            <router-link v-if="authenticated" to="/login" v-on:click.native="logout()" replace>Logout</router-link>
+        </div>
+          <router-view @authenticated="setAuthenticated" />
         </v-container>
       </v-main>  
 
@@ -64,7 +67,23 @@ export default {
 
   data: () => ({
     logo,
+
+    return: {
+                authenticated: false,
+                mockAccount: {
+                    username: "bharath",
+                    password: "test"
+                }
+            }
+
   }),
+
+  mounted() {
+            if(!this.authenticated) {
+                this.$router.replace({ name: "login" });
+            }
+        },
+
   methods: {
     goHome() {
       this.$router.push({ name: 'home' });
@@ -80,7 +99,13 @@ export default {
     },
     goRegister() {
       this.$router.push({ name: 'register' });
-    }
+    },
+    setAuthenticated(status) {
+                this.authenticated = status;
+            },
+            logout() {
+                this.authenticated = false;
+            }
 
   },
 
