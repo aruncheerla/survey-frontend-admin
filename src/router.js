@@ -1,7 +1,5 @@
 import { createWebHistory, createRouter } from "vue-router";
 
-
-
 const routes =  [
   {
     path: "/surveys",
@@ -46,7 +44,7 @@ const routes =  [
   {
     path: "/login",
     name: "login",
-    component: () => import("./views/Login.vue"),
+    component: () => import("./views/login.vue"),
     props: true
   },
   {
@@ -55,8 +53,15 @@ const routes =  [
     component: () => import("./views/Register.vue"),
     props: true
   },
+  {
+    path: "/secure",
+    name: "Secure",
+    component: () => import("./views/secure.vue"),
+    props: true
+  },
   
 ];
+
 const router = createRouter({
   base: process.env.NODE_ENV === 'development' ? '/' : '/tutorial-frontend-1/',
   history: createWebHistory(process.env.BASE_URL),

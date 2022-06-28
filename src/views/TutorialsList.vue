@@ -9,7 +9,7 @@
           <v-btn color = "success"
             @click="searchTitle"
           >
-            Search
+            Search 
           </v-btn>
         </v-col>
         <v-col col="12" sm="10">
@@ -51,6 +51,9 @@
   <v-btn  @click="removeAllTutorials">
     Remove All
   </v-btn>
+
+
+
 </template>
 <script>
 import TutorialDataService from "../services/TutorialDataService";
@@ -137,4 +140,5 @@ export default {
 .v-container h4{
   margin-bottom: 25px;
 }
+
 </style>

@@ -14,8 +14,7 @@
             <v-col col="2"> </v-col>
             <v-col col="2">
                 <v-btn color="success" @click="saveTutorial()"
-                    >Save</v-btn
-                >
+                    >Save</v-btn >
             </v-col>
             <v-col col="2">
                 <v-btn color="info" @click="cancel()">Cancel</v-btn>
@@ -66,4 +65,16 @@ export default {
 .v-main__wrap h4{
   margin-bottom: 18px;
 }
+form button.v-btn {
+border: 2px solid;
+    margin-bottom: 27px;
+    font-size: 18px;
+    border-radius: 0;
+    padding: 7px 18px;
+    color: #000 !important;
+    height: unset;
+    background-color: #fff !important;
+}
+
+
 </style>

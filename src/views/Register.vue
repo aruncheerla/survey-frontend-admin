@@ -43,6 +43,7 @@
                      <v-card-actions>
                         <v-spacer></v-spacer>
                         <v-btn to="/">Register</v-btn>
+                        <v-btn to="/">Cancel</v-btn>
                      </v-card-actions>
                   </v-card>
                </v-flex>
@@ -51,6 +52,7 @@
       </v-content>
    </v-app>
 </template>
+
 
 <script>
 export default {
@@ -91,5 +93,8 @@ export default {
 }
 header.v-theme--light{
     background-color: #000;
+}
+.v-card-actions .v-btn ~ .v-btn {
+    margin-inline-start: 6.3rem;
 }
 </style>
