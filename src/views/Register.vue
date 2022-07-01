@@ -7,7 +7,7 @@
                <v-flex xs12 sm8 md4>
                   <v-card class="elevation-12">
                      <v-toolbar dark >
-                        <v-toolbar-title>Fill the form to Register</v-toolbar-title>
+                        <v-toolbar-title>Fill the Form to Register</v-toolbar-title>
                      </v-toolbar>
                      <v-card-text>
                         <v-form>
@@ -38,6 +38,7 @@
                               label="Date Of Birth (mm/dd/yy)"
                               type="text"
                            ></v-text-field>
+                          
                         </v-form>
                      </v-card-text>
                      <v-card-actions>
@@ -60,6 +61,7 @@ export default {
    props: {
       source: String,
    },
+
 };
 </script>
 
