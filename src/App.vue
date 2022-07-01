@@ -18,6 +18,12 @@
                 </v-btn>
                 <v-btn 
                     variant="text"
+                    @click="goAbout"
+                    >
+                  About Us
+                </v-btn>
+                <v-btn 
+                    variant="text"
                     @click="goList"
                     >
                   List
@@ -26,7 +32,7 @@
                     variant="text"
                     @click="goAdd"
                     >
-                  Add
+                  Add Survey
                 </v-btn>
                 <v-btn 
                     variant="text"
@@ -53,7 +59,12 @@
 
       <div class="footer">
            <div class="container">
-             <p>© Copyright 2022 My Surveys. All rights reserved</p>
+             <p>© Copyright 2022 My Surveys. All rights reserved.<v-btn 
+                    variant="text"
+                    @click="goPrivacy"
+                    >
+                  Privacy Policy
+                </v-btn></p>
            </div>   
       </div>
 
@@ -91,6 +102,12 @@ export default {
     goAdd() {
       this.$router.push({ name: 'add' });
     },
+    goAbout() {
+      this.$router.push({ name: 'about' });
+    },
+    goPrivacy() {
+      this.$router.push({ name: 'privacy' });
+    },
     goList() {
       this.$router.push({ name: 'tutorials' });
     },
@@ -123,6 +140,22 @@ export default {
     color: #000;
     font-size: 14px;
     padding: 7px;
+}
+.footer button{
+  color: #000;
+    font-family: "Roboto", sans-serif;
+    font-size: 14px;
+    letter-spacing: unset;
+    padding: 7px;
+    font-weight: unset;
+    text-transform: none;
+}
+footer .v-btn:hover .v-btn__overlay {
+    opacity: 0;
+        transition: unset;
+}
+footer .v-btn__overlay {
+    position: relative;
 }
 
 </style>

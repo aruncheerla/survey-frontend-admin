@@ -1,5 +1,5 @@
 <template>
-    <h1>Survey Add</h1>
+    <h1>Add Survey</h1>
     <h4>{{ message }}</h4>
     <v-form>
        <v-text-field
@@ -10,6 +10,12 @@
             label="Survey Description"
             v-model="tutorial.description"
         />
+        <v-select
+          :items="items"
+          filled
+          label="Survey Type"
+        ></v-select>
+
         <v-row justify="center">
             <v-col col="2"> </v-col>
             <v-col col="2">
@@ -23,6 +29,9 @@
         </v-row>
     </v-form>
 </template>
+
+
+
 <script>
 import TutorialDataService from "../services/TutorialDataService";
 export default {
@@ -35,6 +44,7 @@ export default {
         description: "",
         published: false
       },
+       items: ['Market Research Survey', 'Customer Feedback Survey', 'Product Feedback Survey'],
       message: "Enter data and click save"
     };
   },
