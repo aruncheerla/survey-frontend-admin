@@ -84,9 +84,9 @@ export default {
         }).then(
           (result) => {
             console.log("result", result);
-            if (result.status == 200) {
+            if (result.data.resultCode == 200) {
               alert("Login Successful");
-              this.$router.push({ name: 'add' });
+              this.$router.push({ name: 'tutorials' });
             } else {
             alert("Invalid user ");
             }
