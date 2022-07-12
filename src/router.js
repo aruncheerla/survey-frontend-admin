@@ -24,6 +24,16 @@ const routes =  [
     component: () => import("./views/AddTutorial.vue")
   },
   {
+    path: "/about",
+    name: "about",
+    component: () => import("./views/about.vue")
+  },
+  {
+    path: "/privacy",
+    name: "privacy",
+    component: () => import("./views/privacy.vue")
+  },
+  {
     path: "/view",
     name: "view",
     component: () => import("./views/ViewTutorial.vue"),
