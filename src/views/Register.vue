@@ -13,9 +13,15 @@
                 <v-form>
                   <v-text-field
                     name="name"
-                    label="Full Name"
+                    label="First Name"
                     type="text"
                     v-model="name"
+                  ></v-text-field>
+                  <v-text-field
+                    name="name"
+                    label="Last Name"
+                    type="text"
+                    v-model="lname"
                   ></v-text-field>
                   <v-text-field
                     id="password"
@@ -72,7 +78,8 @@ export default {
       name: "",
       password: "",
       email:"",
-      dob:""
+      dob:"",
+      lname:''
     };
   },
   methods: {
@@ -80,31 +87,38 @@ export default {
       console.log("in register  fun",this.name);
       if (this.name != "" && this.password != "" && this.email != "" ) {
 
-        axios({
-          method: "POST",
-          url: "http://localhost:9005/api/survey/createUser",
-          data: { email: this.email, password: this.password,fullName:this.name,dataOfBirth:this.dob,createdBy:this.email },
-          headers: {
-    'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
-    'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2',
-    'Content-Type': 'application/json'
-  },
-        }).then(
-          (result) => {
-            if (result.resultCode == 200) {
-              alert(result.resultMessage);
-              this.userid = result.data.ResponseData;
-              this.$router.push({ name: 'login' });
-            } else {
-            alert(result.resultMessage);
-            }
-          },
-          (error) => {
-            console.error(error);
-          }
-        );
+      var data = JSON.stringify({
+        "userEmail":this.email,
+        "userPassword": this.password,
+        "userFirstName": this.name,
+        "userLastName": this.name
+      });
+
+      var config = {
+        method: 'post',
+        url: 'http://localhost:9005/api/survey/createUser',
+        headers: {
+          'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
+          'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2',
+          'Content-Type': 'application/json'
+        },
+        data : data
+      };
+
+      axios(config)
+      .then((response)=> {
+        if(response.data.resultCode == 200){
+        alert(response.data.resultMessage);
+        this.$router.push({ name: 'login' });
+        }else{
+        alert(response.data.resultMessage)
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
       } else {
-        console.log("A username and password must be present");
+        alert("A username and password must be present");
       }
     },
   },
