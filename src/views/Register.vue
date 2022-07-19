@@ -85,20 +85,18 @@ export default {
           url: "http://localhost:9005/api/survey/createUser",
           data: { email: this.email, password: this.password,fullName:this.name,dataOfBirth:this.dob,createdBy:this.email },
           headers: {
-            "x-api-key": "qwrtrthedwd2124@#$%2sSQw2",
-          },
+    'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
+    'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2',
+    'Content-Type': 'application/json'
+  },
         }).then(
           (result) => {
-            if (result.status == 200) {
-              alert("Sign up Successful");
-              this.$alertify.success(result.data.ReturnMessage);
+            if (result.resultCode == 200) {
+              alert(result.resultMessage);
               this.userid = result.data.ResponseData;
-              let path = this.$router.resolve("/Dashboard/" + this.userid);
-              window.open(path.href, "_self");
+              this.$router.push({ name: 'login' });
             } else {
-            alert("error");
-
-              this.$alertify.error(result.data.ReturnMessage);
+            alert(result.resultMessage);
             }
           },
           (error) => {

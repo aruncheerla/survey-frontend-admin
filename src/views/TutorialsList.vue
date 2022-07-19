@@ -1,144 +1,242 @@
 <template>
-
-    <h1>Surveys List</h1>
-    <h4>{{ message }}</h4>
-  
-      <v-row >
-        <v-col  cols="12"
-        sm="2">
-          <v-btn color = "success"
-            @click="searchTitle"
-          >
-            Search 
-          </v-btn>
-        </v-col>
-        <v-col col="12" sm="10">
-            <v-text-field density="compact" clearable
-              v-model="title"/>
-        </v-col> 
-      </v-row>
-      <v-row>
-        <v-col  cols="9"
-              sm="2">
-            <span class="text-h6">Title</span>
-        </v-col>
-        <v-col  cols="9"
-              sm="4">
-            <span class="text-h6">Description</span>
-        </v-col>
-        <v-col  cols="9"
-              sm="1">
-            <span class="text-h6">Edit</span>
-        </v-col>
-        <v-col  cols="9"
-              sm="1">
-            <span class="text-h6">View</span>
-        </v-col>
-        <v-col  cols="9"
-              sm="1">
-            <span class="text-h6">Delete</span>
-        </v-col>
-      </v-row>
-      <TutorialDisplay
-        v-for="tutorial in tutorials"
-        :key="tutorial.id"
-        :tutorial="tutorial"
-        @deleteTutorial="goDelete(tutorial)"
-        @updateTutorial="goEdit(tutorial)"
-        @viewTutorial="goView(tutorial)"
-    />
- 
-  <v-btn  @click="removeAllTutorials">
-    Remove All
-  </v-btn>
-
-
-
+<v-card-text>
+  <h1>Surveys List</h1>
+  <h4>Search, Edit or Delete Surveys</h4>
+  <v-btn @click="deleteData">DELETE</v-btn>
+</v-card-text>
+<table-lite :has-checkbox="true" :is-loading="table.isLoading" :is-re-search="table.isReSearch" :columns="table.columns" :rows="table.rows" :rowClasses="table.rowClasses" :total="table.totalRecordCount" :sortable="table.sortable"
+  @do-search="doSearch" @is-finished="tableLoadingFinish" @return-checked-rows="updateCheckedRows" @row-clicked="rowClicked"></table-lite>
 </template>
+
 <script>
-import TutorialDataService from "../services/TutorialDataService";
-import TutorialDisplay from '@/components/TutorialDisplay.vue';
-export default {
-  name: "tutorials-list",
-  data() {
-    return {
-      tutorials: [],
-      currentTutorial: null,
-      currentIndex: -1,
-      title: "",
-      message : "Search, Edit or Delete Surveys"
-    };
-  },
+import {
+  defineComponent,
+  reactive
+} from "vue";
+import TableLite from "vue3-table-lite";
+import axios from "axios";
+
+
+export default defineComponent({
+  name: "App",
   components: {
-        TutorialDisplay
-    },
-  methods: {
-    goEdit(tutorial) {
-      this.$router.push({ name: 'edit', params: { id: tutorial.id } });
-    },
-    goView(tutorial) {
-      this.$router.push({ name: 'view', params: { id: tutorial.id } });
-    },
-    goDelete(tutorial) {
-      TutorialDataService.delete(tutorial.id)
-        .then( () => {
-    
-          this.retrieveTutorials()
+    TableLite
+  },
+  setup() {
+    // Table config
+    const table = reactive({
+      isLoading: false,
+      isReSearch: false,
+      rowClasses: (row) => {
+        if (row.id == 1) {
+          return ["aaa", "is-id-one"];
+        }
+        return ["bbb", "other"];
+      },
+      columns: [{
+          label: "ID",
+          field: "id",
+          width: "3%",
+          sortable: true,
+          isKey: true,
+        },
+        {
+          label: "Survey Title",
+          field: "survey_name",
+          width: "10%",
+          sortable: true,
+        },
+        {
+          label: "Survey Description",
+          field: "survey_description",
+          width: "15%",
+          sortable: true,
+        },
+        {
+          label: "View",
+          field: "view",
+          width: "10%",
+          display: function(row) {
+            return (
+              '<button type="button" style="background: yellow; width:100%;" data-id="' +
+              row.id +
+              '" class="is-rows-el view-btn">View</button>'
+            );
+          },
+        },
+        {
+          label: "Edit",
+          field: "edit",
+          width: "10%",
+          display: function(row) {
+            return (
+              '<button type="button" style="background: #6495ED; width:100%;" data-id="' +
+              row.id +
+              '" class="is-rows-el edit-btn">Edit</button>'
+            );
+          },
+        },
+        {
+          label: "Delete",
+          field: "delete",
+          width: "10%",
+          display: function(row) {
+            return (
+              '<button type="button" style="background: #E95462; width:100%;" data-id="' +
+              row.id +
+              '" class="is-rows-el delete-btn">Delete</button>'
+            );
+          },
+        },
+      ],
+      rows: [],
+      totalRecordCount: 0,
+      sortable: {
+        order: "id",
+        sort: "asc",
+      },
+      messages: {
+        pagingInfo: "Showing {0}-{1} of {2}",
+        pageSizeChangeLabel: "Row count:",
+        gotoPageLabel: "Go to page:",
+        noDataAvailable: "No data",
+      },
+    });
+    /**
+     * Search Event
+     */
+     let Ids=[]
+    const doSearch = async (offset, limit, order, sort) => {
+      table.isLoading = true;
+
+      table.isReSearch = offset == undefined ? true : false;
+      if (offset >= 10 || limit >= 20) {
+        limit = 20;
+      }
+      if (sort == "asc") {
+        var config = {
+          method: 'get',
+          url: 'http://localhost:9005/api/surveydetails/surveyList',
+          headers: {
+            'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
+            'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2'
+          }
+        };
+        axios(config)
+          .then(function(response) {
+            console.log(JSON.stringify(response.data.responseData));
+            table.rows = response.data.responseData
+            table.totalRecordCount = response.data.responseData.length;
+            table.sortable.order = order;
+            table.sortable.sort = sort;
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
+    };
+    /**
+     * Loading finish event
+     */
+    const tableLoadingFinish = (elements) => {
+      console.log(Array.prototype, "Array.prototypeArray.prototypeArray.prototypeArray.prototype", elements)
+      table.isLoading = false;
+      Array.prototype.forEach.call(elements, function(element) {
+        console.log(element.classList, "element.classListelement.classListelement.classListelement.classList")
+        if (element.classList.contains("view-btn")) {
+          element.addEventListener("click", function(event) {
+            event.stopPropagation(); // prevents further propagation of the current event in the capturing and bubbling phases.
+            console.log(this.dataset.id + " view-btn click!!");
+          });
+        }
+        if (element.classList.contains("edit-btn")) {
+          element.addEventListener("click", function(event) {
+            event.stopPropagation(); // prevents further propagation of the current event in the capturing and bubbling phases.
+            console.log(this.dataset.id + " edit-btn click!!");
+          });
+        }
+        if (element.classList.contains("delete-btn")) {
+          element.addEventListener("click", function(event) {
+            event.stopPropagation(); // prevents further propagation of the current event in the capturing and bubbling phases.
+            console.log(this.dataset.id + " delete-btn click!!");
+            var data = JSON.stringify({
+              "surveyId": [this.dataset.id]
+            });
+
+            var config = {
+              method: 'delete',
+              url: 'http://localhost:9005/api/surveydetails/deleteSurveyById',
+              headers: {
+                'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
+                'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2',
+                'Content-Type': 'application/json'
+              },
+              data: data
+            };
+
+            axios(config)
+              .then(function(response) {
+                console.log(JSON.stringify(response.data));
+                alert(response.data.resultMessage)
+                doSearch(0, 10, "id", "asc");
+              })
+              .catch(function(error) {
+                console.log(error);
+              });
+          });
+        }
+      });
+    };
+    /**
+     * Row checked event
+     */
+    const updateCheckedRows = (rowsKey) => {
+    Ids=rowsKey
+      console.log(rowsKey, "rowsKeyrowsKey");
+    };
+    // First get data
+    doSearch(0, 10, "id", "asc");
+    /**
+     * Row clicked event
+     */
+    const rowClicked = (row) => {
+      console.log("Row clicked!", row);
+    };
+
+    const deleteData = () => {
+      var data = JSON.stringify({
+        "surveyId": Ids
+      });
+
+      var config = {
+        method: 'delete',
+        url: 'http://localhost:9005/api/surveydetails/deleteSurveyById',
+        headers: {
+          'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
+          'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2',
+          'Content-Type': 'application/json'
+        },
+        data: data
+      };
+
+      axios(config)
+        .then(function(response) {
+          console.log(JSON.stringify(response.data));
+          alert(response.data.resultMessage)
+          doSearch(0, 10, "id", "asc");
         })
-        .catch(e => {
-          this.message = e.response.data.message;
-        });
-    },
-    retrieveTutorials() {
-      TutorialDataService.getAll()
-        .then(response => {
-          this.tutorials = response.data;
-          
-        })
-        .catch(e => {
-          this.message = e.response.data.message;
-        });
-    },
-    refreshList() {
-      this.retrieveTutorials();
-      this.currentTutorial = null;
-      this.currentIndex = -1;
-    },
-    setActiveTutorial(tutorial, index) {
-      this.currentTutorial = tutorial;
-      this.currentIndex = tutorial ? index : -1;
-    },
-    removeAllTutorials() {
-      TutorialDataService.deleteAll()
-        .then(response => {
-          console.log(response.data);
-          this.refreshList();
-        })
-        .catch(e => {
-          this.message = e.response.data.message;
-        });
-    },
-    
-    searchTitle() {
-      TutorialDataService.findByTitle(this.title)
-        .then(response => {
-          this.tutorials = response.data;
-          this.setActiveTutorial(null);
-          
-        })
-        .catch(e => {
-          this.message = e.response.data.message;
+        .catch(function(error) {
+          console.log(error);
         });
     }
+    return {
+      table,
+      doSearch,
+      tableLoadingFinish,
+      updateCheckedRows,
+      rowClicked,
+      deleteData
+    };
   },
-  mounted() {
-    this.retrieveTutorials();
-  }
-};
+});
 </script>
-<style>
-.v-container h4{
-  margin-bottom: 25px;
-}
-
-</style>

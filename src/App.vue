@@ -46,6 +46,12 @@
                     >
                   Register
                 </v-btn>
+                <v-btn v-if="$route.name == 'add' || $route.name == 'tutorials'"
+                    variant="text"
+                    @click="logout"
+                    >
+                  LogOut
+                </v-btn>
             </v-toolbar-items>
       </v-app-bar>
       <v-main >
@@ -98,6 +104,11 @@ export default {
         },
 
   methods: {
+  logout(){
+  this.$router.push({ name: 'login' });
+  this.url="login"
+    console.log(this.$router,"[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]")
+  },
     goHome() {
       this.$router.push({ name: 'home' });
       this.url="home"

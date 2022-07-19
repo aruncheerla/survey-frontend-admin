@@ -55,6 +55,7 @@ import axios from "axios";
 
 export default {
   name: "Login",
+
   data() {
     return {
       input: {
@@ -64,23 +65,20 @@ export default {
     };
   },
   methods: {
+  isRequired(value) {
+      return value ? true : 'This field is required';
+    },
     login() {
       console.log("in log in fun");
       if (this.input.username != "" && this.input.password != "") {
-        console.log(
-          "this.input.username",
-          this.input.username,
-          "this.input.password",
-          this.input.password
-        );
-
         axios({
-          method: "POST",
-          url: "http://localhost:9005/api/survey/login",
-          data: { email: this.input.username, password: this.input.password },
+          method: "GET",
+          url: "http://localhost:9005/api/survey/login?userEmail="+ this.input.username + "&userPassword=" + this.input.password,
           headers: {
-            "x-api-key": "qwrtrthedwd2124@#$%2sSQw2",
-          },
+    'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
+    'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2',
+    'Content-Type': 'application/json'
+  },
         }).then(
           (result) => {
             console.log("result", result);
