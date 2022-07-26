@@ -1,101 +1,134 @@
 <template>
-    <h2>Tutorial View</h2>
-    <h4>{{ message }}</h4>
-    <h3> {{tutorial.title}}</h3>
-    <v-btn color="success" @click="goEditTutorial()"
-    >Edit</v-btn>
-     <v-btn color="success" @click="goAddLesson(id)"
-    >Add Lesson</v-btn>
+<h1>{{surveyName}}</h1>
+<h4>{{ surveyDescription }}</h4>
+<v-form v-for="(que, i) in QuestionDetails" :key="i">
 
-     <v-row>
-        <v-col  cols="8"
-              sm="2">
-            <span class="text-h6">Title</span>
-        </v-col>
-        <v-col  cols="8"
-              sm="4">
-            <span class="text-h6">Description</span>
-        </v-col>
-        <v-col  cols="8"
-              sm="1">
-            <span class="text-h6">Edit</span>
-        </v-col>
-        <v-col  cols="8"
-              sm="1">
-            <span class="text-h6">Delete</span>
-        </v-col>
-      </v-row>
-      <LessonDisplay
-        v-for="lesson in lessons"
-        :key="lesson.id"
-        :lesson="lesson"
-        @deleteLesson="goDeleteLesson(lesson)"
-        @updateLesson="goEditLesson(lesson)"
-    />
 
-   
+  <v-text-field class="font-class-name" outlined dense>{{que.surveyquestion_text}}</v-text-field>
+
+  <template v-for="(option,oid) in que.surveyquestion_answer" :key="oid">
+
+    <label v-if="que.surveyquestion_type=='mcq'" disabled>
+      <input type="radio" :value="option" v-model="responses[que.id]" disabled/>&nbsp&nbsp
+      <span>{{ option }}</span><br>
+    </label>
+
+    <label v-if="que.surveyquestion_type=='checkbox'" disabled>
+      <input type="checkbox" :value="option" v-model="checked" @change="check($event,que.id)" disabled/>&nbsp&nbsp
+      <span>{{ option }}</span><br>
+    </label>
+
+    <v-text-field disabled v-if="que.surveyquestion_type=='description'" label="Please add your response here" v-model="desc[que.id]" />
+  </template><br>
+
+
+
+
+
+
+
+
+</v-form>
 </template>
+
+
+
 <script>
 import TutorialDataService from "../services/TutorialDataService";
-import LessonDataService from "../services/LessonDataService";
-import LessonDisplay from '@/components/LessonDisplay.vue';
+import axios from "axios";
 export default {
-  name: "view-tutorial",
-  props: ['id'],
-    components: {
-        LessonDisplay
-    },
+  name: "add-tutorial",
   data() {
     return {
-      tutorial: {},
-      lessons : [],
-      message: "Add, Edit or Delete Lessons"
+      responses: {},
+      picked: [],
+      QuestionDetails: [],
+      optionDetails: [],
+      desc: {},
+      qId: [],
+      result: [],
+      checked: [],
+      surveyName: '',
+      surveyDescription: '',
+      tutorial: {
+        id: null,
+        title: "",
+        description: "",
+        published: false
+      },
+      arr: [],
+      temp: [],
+      items: ['Market Research Survey', 'Customer Feedback Survey', 'Product Feedback Survey'],
+      message: "Enter data and click save"
     };
   },
-  methods: {
-    retrieveLessons() {
-      TutorialDataService.get(this.id)
-        .then(response => {
-          this.tutorial= response.data;
-          LessonDataService.getAllLessons(this.id)
-            .then(response=> {
-              this.lessons = response.data})
-            .catch(e => {
-                this.message = e.response.data.message;
-              });
-            })
-        .catch(e => {
-          this.message = e.response.data.message;
-        });
-    },
-     goEditTutorial() {
-      this.$router.push({ name: 'edit', params: { id: this.id } });
-    },
-    goEditLesson(lesson) {
-      this.$router.push({ name: 'editLesson', params: { tutorialId: this.id,lessonId: lesson.id} });
-    },
-    goAddLesson() {
-      this.$router.push({ name: 'addLesson', params: { tutorialId: this.id } });
-    },
-
-    goDeleteLesson(lesson) {
-      LessonDataService.deleteLesson(lesson.tutorialId,lesson.id)
-        .then( () => {
-          this.retrieveLessons()
-        })
-        .catch(e => {
-          this.message = e.response.data.message;
-        });
-    },
-    cancel(){
-        this.$router.push({ name: 'tutorials' });
-    }
+  mounted() {
+    this.displayQuestions()
   },
-    mounted() {
-    this.retrieveLessons();
+  methods: {
+    check(event, item) {
+
+      //  this.responses[i]=this.checked.join(",")
+
+
+    },
+    displayQuestions() {
+
+      var data = JSON.stringify({
+        "surveyId": this.$route.query.surveyId
+      });
+
+      var config = {
+        method: 'post',
+        url: 'http://localhost:9005/api/surveydetails/surveyDetailsBySurveyId',
+        headers: {
+          'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
+          'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2',
+          'Content-Type': 'application/json'
+        },
+        data: data
+      };
+
+      axios(config)
+        .then(response => {
+          console.log(JSON.stringify(response.data));
+          this.surveyName = response.data.SurveyDetails[0].survey_name
+          this.surveyDescription = response.data.SurveyDetails[0].survey_description
+          this.QuestionDetails = response.data.QuestionDetails
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    cancel() {
+      this.$router.push({
+        name: 'tutorials'
+      });
+    }
   }
 }
 </script>
-
 <style>
+.font-class-name * {
+  font-size: 24px;
+  font-color: black !important;
+  font-weight: bold;
+  border-color: black !important
+}
+
+.v-main__wrap h4 {
+  margin-bottom: 18px;
+}
+
+
+form button.v-btn {
+  border: 2px solid;
+  margin-bottom: 27px;
+  font-size: 18px;
+  border-radius: 0;
+  padding: 7px 18px;
+  color: #000 !important;
+  height: unset;
+  background-color: #fff !important;
+}
 </style>

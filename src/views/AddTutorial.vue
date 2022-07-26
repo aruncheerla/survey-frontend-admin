@@ -70,6 +70,7 @@
 import axios from "axios";
 import Datepicker from 'vue3-datepicker'
 import moment from 'moment'
+import WebStorageCache from 'web-storage-cache'
 
 export default {
   name: "add-tutorial",
@@ -104,16 +105,26 @@ export default {
       participants: '',
       participantsFlag:false,
       queSaveButton:true,
-      surveySaveButton:true
+      surveySaveButton:true,
+      userId:''
 
     };
   },
+  mounted(){
+  var cache = new WebStorageCache();
+  console.log(cache.get('userId'),"=================================================================")
+  this.userId=cache.get('userId');
+  },
   methods: {
     addParticipants() {
+    console.log(this.participants);
+    let sp=this.participants.split(",")
+    console.log(sp,"++++++++")
       var data = JSON.stringify({
-        "surveyParticipantsEmail": [this.participants],
+        "surveyParticipantsEmail": sp,
         "surveyId": this.surveyId
       });
+      console.log(data,"data&&&&&&&&&&&&&&&&&&&&&&&&)))")
 
       var config = {
         method: 'post',
@@ -129,7 +140,8 @@ export default {
       axios(config)
         .then((response)=> {
           alert(response.data.resultMessage)
-          this.$router.push({ name: 'tutorials' });
+          this.$router.push({ name: 'tutorials',query: { id:this.userId } });
+
         })
         .catch(function(error) {
           console.log(error);
@@ -148,6 +160,7 @@ export default {
       this.textFields.splice(index, 1)
     },
     momentFunction(date) {
+    console.log(date,"++++++++++++++++++++++++++++++++++++++++++++++")
       return moment(date).format('DD-MM-YYYY');
     },
     saveQuestions() {
@@ -161,11 +174,12 @@ export default {
             str += i + ","
           })
         }
-        str.slice(0, -1)
+        let tr=str.slice(0, -1)
+        console.log(tr,"++++++")
         questionDetails.push({
           surveyQuestionType: item.qtype,
           surveyQuestionText: item.value1,
-          surveyQuestionOptionDetails: str
+          surveyQuestionOptionDetails: tr
         })
       })
 
@@ -212,7 +226,7 @@ export default {
         surveyDescription: this.tutorial.description,
         surveyStartDate: this.momentFunction(this.startDate),
         surveyEndDate: this.momentFunction(this.endDate),
-        userId: 2
+        userId:this.userId
       };
       console.log(data)
       var surveyd;

@@ -81,10 +81,11 @@ export default {
   },
         }).then(
           (result) => {
-            console.log("result", result);
+            console.log("result.data", result);
             if (result.data.resultCode == 200) {
+            let id=result.data.responseData[0].id
               alert("Login Successful");
-              this.$router.push({ name: 'tutorials' });
+              this.$router.push({ name: 'tutorials',query: { id } });
             } else {
             alert("Invalid user ");
             }

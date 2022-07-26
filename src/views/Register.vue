@@ -24,6 +24,12 @@
                     v-model="lname"
                   ></v-text-field>
                   <v-text-field
+                    name="email"
+                    label="Email"
+                    type="text"
+                    v-model="email"
+                  ></v-text-field>
+                  <v-text-field
                     id="password"
                     name="password"
                     label="Password"
@@ -36,18 +42,6 @@
                     label="Confirm Password"
                     type="password"
                     v-model="confirmPassword"
-                  ></v-text-field>
-                  <v-text-field
-                    name="email"
-                    label="Email"
-                    type="text"
-                    v-model="email"
-                  ></v-text-field>
-                  <v-text-field
-                    name="dob"
-                    label="Date Of Birth (mm/dd/yy)"
-                    type="date"
-                    v-model="dob"
                   ></v-text-field>
                 </v-form>
               </v-card-text>

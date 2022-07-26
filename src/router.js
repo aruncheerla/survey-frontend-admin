@@ -13,7 +13,7 @@ const routes =  [
     component: () => import("./views/home.vue")
   },
   {
-    path: "/edit/:id",
+    path: "/edit",
     name: "edit",
     component: () => import("./views/EditTutorial.vue"),
     props: true
@@ -40,9 +40,21 @@ const routes =  [
     props: true
   },
   {
+    path: "/response",
+    name: "response",
+    component: () => import("./views/participantAns.vue"),
+    props: true
+  },
+  {
     path: "/addLesson",
     name: "addLesson",
     component: () => import("./views/AddLesson.vue"),
+    props: true
+  },
+  {
+    path: "/surveyForm",
+    name: "surveyForm",
+    component: () => import("./views/surveyForm.vue"),
     props: true
   },
   {
@@ -69,7 +81,7 @@ const routes =  [
     component: () => import("./views/secure.vue"),
     props: true
   },
-  
+
 ];
 
 const router = createRouter({
