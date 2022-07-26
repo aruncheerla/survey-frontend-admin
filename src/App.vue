@@ -48,7 +48,7 @@
                 </v-btn>
                 <v-btn v-if="$route.name == 'add' || $route.name == 'tutorials'"
                     variant="text"
-                    @click="logout"
+                    @click="logouttab"
                     >
                   LogOut
                 </v-btn>
@@ -96,15 +96,15 @@ export default {
   }),
 
   mounted() {
-            if(!this.authenticated) {
+            /*if(!this.authenticated) {
                 this.$router.replace({ name: "login" });
                 this.url="login"
-            }
+            }*/
 
         },
 
   methods: {
-  logout(){
+  logouttab(){
   this.$router.push({ name: 'login' });
   this.url="login"
     console.log(this.$router,"[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]")
@@ -143,6 +143,14 @@ export default {
             },
             logout() {
                 this.authenticated = false;
+            },
+            surveyForm(){
+            this.$router.push({ name: 'surveyForm' });
+            this.url="surveyForm"
+            },
+            response(){
+            this.$router.push({ name: 'response' });
+            this.url="response"
             }
 
   },

@@ -9,12 +9,16 @@
 </template>
 
 <script>
+
 import {
   defineComponent,
   reactive
 } from "vue";
 import TableLite from "vue3-table-lite";
 import axios from "axios";
+import {useRoute} from "vue-router";
+import Router from '../router'
+import WebStorageCache from 'web-storage-cache'
 
 
 export default defineComponent({
@@ -23,6 +27,9 @@ export default defineComponent({
     TableLite
   },
   setup() {
+const id =  useRoute().query.id
+var cache = new WebStorageCache();
+ cache.set('userId',id );
     // Table config
     const table = reactive({
       isLoading: false,
@@ -88,6 +95,18 @@ export default defineComponent({
             );
           },
         },
+        {
+          label: "Response",
+          field: "response",
+          width: "10%",
+          display: function(row) {
+            return (
+              '<button type="button" style="background: #00FF00; width:100%;" data-id="' +
+              row.id +
+              '" class="is-rows-el response-btn">Result</button>'
+            );
+          },
+        },
       ],
       rows: [],
       totalRecordCount: 0,
@@ -116,7 +135,7 @@ export default defineComponent({
       if (sort == "asc") {
         var config = {
           method: 'get',
-          url: 'http://localhost:9005/api/surveydetails/surveyList',
+          url: 'http://localhost:9005/api/surveydetails/surveyList?userId='+id,
           headers: {
             'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
             'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2'
@@ -147,12 +166,14 @@ export default defineComponent({
           element.addEventListener("click", function(event) {
             event.stopPropagation(); // prevents further propagation of the current event in the capturing and bubbling phases.
             console.log(this.dataset.id + " view-btn click!!");
+            Router.push('/view?surveyId='+this.dataset.id)
           });
         }
         if (element.classList.contains("edit-btn")) {
           element.addEventListener("click", function(event) {
             event.stopPropagation(); // prevents further propagation of the current event in the capturing and bubbling phases.
             console.log(this.dataset.id + " edit-btn click!!");
+            Router.push('/edit?surveyId='+this.dataset.id)
           });
         }
         if (element.classList.contains("delete-btn")) {
@@ -183,6 +204,13 @@ export default defineComponent({
               .catch(function(error) {
                 console.log(error);
               });
+          });
+        }
+        if (element.classList.contains("response-btn")) {
+          element.addEventListener("click", function(event) {
+            event.stopPropagation(); // prevents further propagation of the current event in the capturing and bubbling phases.
+            console.log(this.dataset.id + " edit-btn click!!");
+            Router.push('/response?surveyId='+this.dataset.id)
           });
         }
       });
