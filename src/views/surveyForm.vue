@@ -19,6 +19,14 @@
     </label>
 
     <v-text-field v-if="que.surveyquestion_type=='description'" label="Please add your response here" v-model="desc[que.id]" />
+
+    <v-slider v-if="que.surveyquestion_type=='slider'"
+    v-model="val[que.id]"
+          label="thumb-color"
+          thumb-color="red"
+          thumb-label="always"
+></v-slider>
+
   </template><br>
 
 
@@ -39,10 +47,15 @@
 <script>
 import TutorialDataService from "../services/TutorialDataService";
 import axios from "axios";
+
+import { baseurl } from "../http-common"
 export default {
   name: "add-tutorial",
   data() {
     return {
+      val:{},
+      length: 10,
+      rating: {},
       responses: {},
       picked: [],
       QuestionDetails: [],
@@ -138,10 +151,17 @@ export default {
           ans: this.desc[key]
         });
       }
+      for (const key in this.val) {
+        this.finalArray.push({
+          questionId: Number(key),
+          ans: this.val[key]
+        });
+      }
       var data = JSON.stringify(this.finalArray)
+            console.log(data)
       var config = {
         method: 'post',
-        url: 'http://localhost:9005/api/surveyparticipantsanswer/createSurveyParticipantAns',
+        url: baseurl+'surveyparticipantsanswer/createSurveyParticipantAns',
         headers: {
           'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
           'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2',
@@ -166,7 +186,7 @@ export default {
 
       var config = {
         method: 'post',
-        url: 'http://localhost:9005/api/surveydetails/surveyDetailsBySurveyId',
+        url: baseurl+'surveydetails/surveyDetailsBySurveyId',
         headers: {
           'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
           'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2',
@@ -195,8 +215,6 @@ export default {
 }
 </script>
 <style>
-//:disabled {   color: black !important; font-color:black;
-//font-weight: bold;}
 .font-class-name * {
   font-size: 24px;
   font-color: black !important;
@@ -204,6 +222,13 @@ export default {
   border-color: black !important
 }
 
+input[type="radio"] {
+    cursor: pointer;
+}
+
+input[type="checkbox"] {
+    cursor: pointer;
+}
 
 .v-main__wrap h4 {
   margin-bottom: 18px;

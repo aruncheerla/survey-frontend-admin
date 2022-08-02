@@ -52,7 +52,8 @@ export default {
 
 <script>
 import axios from "axios";
-
+import { baseurl } from "../http-common"
+import WebStorageCache from 'web-storage-cache'
 export default {
   name: "Login",
 
@@ -73,7 +74,7 @@ export default {
       if (this.input.username != "" && this.input.password != "") {
         axios({
           method: "GET",
-          url: "http://localhost:9005/api/survey/login?userEmail="+ this.input.username + "&userPassword=" + this.input.password,
+          url: baseurl+"survey/login?userEmail="+ this.input.username + "&userPassword=" + this.input.password,
           headers: {
     'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
     'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2',
@@ -81,11 +82,13 @@ export default {
   },
         }).then(
           (result) => {
+          var cache = new WebStorageCache();
             console.log("result.data", result);
             if (result.data.resultCode == 200) {
             let id=result.data.responseData[0].id
-              alert("Login Successful");
+            let role = result.data.responseData[0].user_role
               this.$router.push({ name: 'tutorials',query: { id } });
+              cache.set('role', role);
             } else {
             alert("Invalid user ");
             }
