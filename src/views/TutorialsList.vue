@@ -1,11 +1,14 @@
 <template>
 <v-card-text>
   <h1>Surveys List</h1>
-  <h4>Search, Edit or Delete Surveys</h4>
-  <v-btn @click="deleteData">DELETE</v-btn>
+  <h4>Search, Edit or Delete Surveys</h4><br>
+  <v-btn @click="deleteData" style="background: #FF0000;color:white; ">DELETE all</v-btn>
 </v-card-text>
 <table-lite :has-checkbox="true" :is-loading="table.isLoading" :is-re-search="table.isReSearch" :columns="table.columns" :rows="table.rows" :rowClasses="table.rowClasses" :total="table.totalRecordCount" :sortable="table.sortable"
-  @do-search="doSearch" @is-finished="tableLoadingFinish" @return-checked-rows="updateCheckedRows" @row-clicked="rowClicked"></table-lite>
+  @do-search="doSearch" @is-finished="tableLoadingFinish" @return-checked-rows="updateCheckedRows" @row-clicked="rowClicked"></table-lite><br><br>
+  <v-row v-if="!table.rows" justify="center">
+    <v-btn @click="addTutorial" style="background: #6495ED; width:20%;">Add Survey</v-btn>
+  </v-row><br>
 </template>
 
 <script>
@@ -19,7 +22,7 @@ import axios from "axios";
 import {useRoute} from "vue-router";
 import Router from '../router'
 import WebStorageCache from 'web-storage-cache'
-
+import { baseurl } from "../http-common"
 
 export default defineComponent({
   name: "App",
@@ -65,9 +68,9 @@ var cache = new WebStorageCache();
           width: "10%",
           display: function(row) {
             return (
-              '<button type="button" style="background: yellow; width:100%;" data-id="' +
+              '<button type="button" style=" width:70%;size:160px;" data-id="' +
               row.id +
-              '" class="is-rows-el view-btn">View</button>'
+              '" class="is-rows-el view-btn">👁</button>'
             );
           },
         },
@@ -77,9 +80,9 @@ var cache = new WebStorageCache();
           width: "10%",
           display: function(row) {
             return (
-              '<button type="button" style="background: #6495ED; width:100%;" data-id="' +
+              '<button type="button" style=" width:70%;size:160px;" data-id="' +
               row.id +
-              '" class="is-rows-el edit-btn">Edit</button>'
+              '" class="is-rows-el edit-btn">✎</button>'
             );
           },
         },
@@ -89,9 +92,9 @@ var cache = new WebStorageCache();
           width: "10%",
           display: function(row) {
             return (
-              '<button type="button" style="background: #E95462; width:100%;" data-id="' +
+              '<button type="button" style= "width:70%; size:160px;" data-id="' +
               row.id +
-              '" class="is-rows-el delete-btn">Delete</button>'
+              '" class="is-rows-el delete-btn">❌</button>'
             );
           },
         },
@@ -129,13 +132,11 @@ var cache = new WebStorageCache();
       table.isLoading = true;
 
       table.isReSearch = offset == undefined ? true : false;
-      if (offset >= 10 || limit >= 20) {
-        limit = 20;
-      }
+
       if (sort == "asc") {
         var config = {
           method: 'get',
-          url: 'http://localhost:9005/api/surveydetails/surveyList?userId='+id,
+          url: baseurl+'surveydetails/surveyList?userId='+id+"&offset="+offset+"&limit="+limit,
           headers: {
             'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
             'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2'
@@ -143,9 +144,8 @@ var cache = new WebStorageCache();
         };
         axios(config)
           .then(function(response) {
-            console.log(JSON.stringify(response.data.responseData));
             table.rows = response.data.responseData
-            table.totalRecordCount = response.data.responseData.length;
+            table.totalRecordCount = response.data.totalCount;
             table.sortable.order = order;
             table.sortable.sort = sort;
           })
@@ -158,10 +158,8 @@ var cache = new WebStorageCache();
      * Loading finish event
      */
     const tableLoadingFinish = (elements) => {
-      console.log(Array.prototype, "Array.prototypeArray.prototypeArray.prototypeArray.prototype", elements)
       table.isLoading = false;
       Array.prototype.forEach.call(elements, function(element) {
-        console.log(element.classList, "element.classListelement.classListelement.classListelement.classList")
         if (element.classList.contains("view-btn")) {
           element.addEventListener("click", function(event) {
             event.stopPropagation(); // prevents further propagation of the current event in the capturing and bubbling phases.
@@ -186,7 +184,7 @@ var cache = new WebStorageCache();
 
             var config = {
               method: 'delete',
-              url: 'http://localhost:9005/api/surveydetails/deleteSurveyById',
+              url: baseurl+'surveydetails/deleteSurveyById',
               headers: {
                 'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
                 'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2',
@@ -238,7 +236,7 @@ var cache = new WebStorageCache();
 
       var config = {
         method: 'delete',
-        url: 'http://localhost:9005/api/surveydetails/deleteSurveyById',
+        url: baseurl+'surveydetails/deleteSurveyById',
         headers: {
           'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
           'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2',
@@ -266,5 +264,10 @@ var cache = new WebStorageCache();
       deleteData
     };
   },
+  methods:{
+    addTutorial(){
+      this.$router.push({ name: 'add' });
+    }
+  }
 });
 </script>

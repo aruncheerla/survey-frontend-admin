@@ -48,7 +48,10 @@
     </v-row>
     <v-card-text>
       <v-text-field label="Add more participants seperated by comma" v-model="participants"></v-text-field>
-      <v-btn @click="addParticipants">Add participants</v-btn>
+      <v-row>
+      <v-btn @click="addParticipants">Add participants</v-btn>&nbsp&nbsp&nbsp
+      <v-btn @click="cancel">Cancel</v-btn>
+      </v-row>
       </v-card-text>
 
   </v-card-text>
@@ -62,6 +65,7 @@ import axios from "axios";
 import Datepicker from 'vue3-datepicker'
 import moment from 'moment'
 import WebStorageCache from 'web-storage-cache'
+import { baseurl } from "../http-common"
 
 export default {
   name: "add-tutorial",
@@ -75,7 +79,7 @@ export default {
       },
       items: ['Market Research Survey', 'Customer Feedback Survey', 'Product Feedback Survey'],
       quesArray: [],
-      quesarray: ['description', 'checkbox', 'mcq'],
+      quesarray: ['description', 'checkbox', 'mcq','slider'],
       message: "Enter data and click save",
       flag: false,
       active: 1,
@@ -143,7 +147,7 @@ export default {
 
     var config = {
       method: 'post',
-      url: 'http://localhost:9005/api/surveyparticipants/bulkCreateSurveyParticipant',
+      url: baseurl+'surveyparticipants/bulkCreateSurveyParticipant',
       headers: {
         'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
         'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2',
@@ -186,7 +190,7 @@ export default {
 
     var config = {
       method: 'put',
-      url: 'http://localhost:9005/api/surveydetails/updateSurvey',
+      url: baseurl+'surveydetails/updateSurvey',
       headers: {
         'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
         'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2',
@@ -213,7 +217,7 @@ export default {
 
     var config = {
       method: 'post',
-      url: 'http://localhost:9005/api/surveydetails/surveyDetailsBySurveyId',
+      url: baseurl+'surveydetails/surveyDetailsBySurveyId',
       headers: {
         'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
         'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2',
@@ -251,7 +255,7 @@ export default {
       });
       var config = {
         method: 'delete',
-        url: 'http://localhost:9005/api/surveyQuestion/deleteQuestionById',
+        url: baseurl+'surveyQuestion/deleteQuestionById',
         headers: {
           'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
           'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2',
@@ -305,7 +309,7 @@ export default {
       console.log(data, "++++++++++++++++pppppppppppppppppppp++++")
       var config = {
         method: 'post',
-        url: 'http://localhost:9005/api/surveyQuestion/bulkCreateSurveyQuestion',
+        url: baseurl+'surveyQuestion/bulkCreateSurveyQuestion',
         headers: {
           'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
           'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2',
@@ -331,9 +335,8 @@ export default {
       this.QuestionDetails[i].surveyquestion_answer.push(this.QuestionDetails[i].surveyquestion_answer.length+1)
     },
     cancel() {
-      this.$router.push({
-        name: 'tutorials'
-      });
+    let id=this.userId
+      this.$router.push({ name: 'tutorials',query: { id } });
     }
   }
 }

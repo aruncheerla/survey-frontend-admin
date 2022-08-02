@@ -29,6 +29,9 @@
 
 
 </v-form>
+<v-card-text>
+  <v-btn @click="cancel">Cancel</v-btn>
+  </v-card-text>
 </template>
 
 
@@ -36,6 +39,8 @@
 <script>
 import TutorialDataService from "../services/TutorialDataService";
 import axios from "axios";
+import WebStorageCache from 'web-storage-cache'
+import { baseurl } from "../http-common"
 export default {
   name: "add-tutorial",
   data() {
@@ -64,6 +69,9 @@ export default {
   },
   mounted() {
     this.displayQuestions()
+    var cache = new WebStorageCache();
+    console.log(cache.get('userId'),"=================================================================")
+    this.userId=cache.get('userId');
   },
   methods: {
     check(event, item) {
@@ -80,7 +88,7 @@ export default {
 
       var config = {
         method: 'post',
-        url: 'http://localhost:9005/api/surveydetails/surveyDetailsBySurveyId',
+        url: baseurl+'surveydetails/surveyDetailsBySurveyId',
         headers: {
           'x-developer-token': 'c256f988-459a-43ca-8fef-9c14f7134900',
           'x-api-key': 'qwrtrthedwd2124@#$%2sSQw2',
@@ -101,9 +109,8 @@ export default {
         });
     },
     cancel() {
-      this.$router.push({
-        name: 'tutorials'
-      });
+    let id=this.userId
+      this.$router.push({ name: 'tutorials',query: { id } });
     }
   }
 }
